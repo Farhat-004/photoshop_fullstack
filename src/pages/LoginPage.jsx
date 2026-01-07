@@ -18,13 +18,21 @@ export default function LoginPage() {
 
     const submitLogin = async (formData) => {
         try {
+            console.log(formData);
+
             const response = await axios.post(
                 `${import.meta.env.VITE_SERVER_BASE_URL}/auth/login`,
                 formData
             );
+            console.log("response", response);
+
             if (response.status === 200) {
                 const { accessToken, refreshToken, user } = response.data;
-                setAuth({ accessToken, refreshToken, user });
+                setAuth({
+                    accessToken,
+                    refreshToken,
+                    user,
+                });
                 toast.success("Logged in successfully", {
                     position: "top-center",
                     autoClose: 3000,
@@ -39,11 +47,13 @@ export default function LoginPage() {
                 navigate("/");
             }
         } catch (error) {
+            console.log(error.message);
+
             setError("root", {
                 type: "manual",
                 message: "Check your email password and try again",
             });
-            toast.error(`${error?.response?.data?.message}`, {
+            toast.error("Check your email password and try again", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -90,7 +100,7 @@ export default function LoginPage() {
                                 <input
                                     {...register("password", {
                                         required: true,
-                                        minLength: 6,
+                                        minLength: 4,
                                     })}
                                     type={showPassword ? "text" : "password"}
                                     className="form-input"

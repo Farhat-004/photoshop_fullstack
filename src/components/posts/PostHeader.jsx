@@ -7,14 +7,15 @@ import Delete from "../../assets/delete.svg";
 import useAuth from "../../hooks/useAuth";
 import useAxios from "../../hooks/useAxios";
 import { Bounce, toast } from "react-toastify";
+// import useAvatar from "../../hooks/useAvatar";
 
 export default function PostHeader({ post }) {
     const { auth } = useAuth();
     const api = useAxios();
-
+    // const { avatarURL } = useAvatar(post?.user?.avatar);
     const [showOptions, setShowOptions] = useState(false);
 
-    const isMe = post?.user?._id == auth?.user?._id;
+    const isMe = post?.author?._id == auth?.user?._id;
 
     const handleDeletePost = async (postsId) => {
         try {
@@ -54,13 +55,11 @@ export default function PostHeader({ post }) {
         <div className="flex items-center justify-between p-3">
             <div className="flex items-center">
                 <Link
-                    to={`/profile-page/${post?.user?._id}`}
+                    to={`/profile-page/${post?.author?._id}`}
                     className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center"
                 >
                     <img
-                        src={`${import.meta.env.VITE_SERVER_URL}/${
-                            post?.user?.avatar
-                        }`}
+                        src={post?.author?.avatar}
                         className="w-full h-full object-cover"
                         alt="User avatar"
                     />
@@ -68,10 +67,10 @@ export default function PostHeader({ post }) {
 
                 <div className="ml-2 flex flex-col">
                     <Link
-                        to={`/profile-page/${post?.user?._id}`}
+                        to={`/profile-page/${post?.author?._id}`}
                         className="font-semibold text-sm leading-tight hover:underline"
                     >
-                        {post?.user?.name}
+                        {post?.name || post?.author?.name}
                     </Link>
 
                     <span className="text-gray-500 text-xs ">

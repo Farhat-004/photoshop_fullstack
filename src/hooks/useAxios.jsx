@@ -35,7 +35,7 @@ export default function useAxios() {
                         const response = await axios.post(
                             `${
                                 import.meta.env.VITE_SERVER_BASE_URL
-                            }/auth/refresh-token`,
+                            }/auth/token`,
                             { refreshToken } // body
                         );
                         const { accessToken } = response.data;

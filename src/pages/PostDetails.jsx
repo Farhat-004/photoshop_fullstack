@@ -9,12 +9,24 @@ import AddComment from "../components/comments/AddComment";
 import useGetPost from "../hooks/useGetPost";
 import { PostContext } from "../contexts";
 import { getDateDifferenceFromNow } from "../utils/getTime";
+import { useEffect, useState } from "react";
 
 export default function PostDetails() {
     const params = useParams();
 
     const { post, refetchPost } = useGetPost(params?.postId);
-
+    const [actions, setActions] = useState({
+        likeCountSate: post?.likesCount ?? 0,
+        commentsCountSate: post?.commentsCount ?? 0,
+    });
+    useEffect(() => {
+        if (post?._id) {
+            setActions({
+                likeCountSate: post?.likesCount,
+                commentsCountSate: post?.commentsCount,
+            });
+        }
+    }, [params?.postId, post?._id, post?.commentsCount, post?.likesCount]);
     return (
         <PostContext value={{ post, refetchPost }}>
             <div className="max-w-6xl w-full p-3">
@@ -37,13 +49,15 @@ export default function PostDetails() {
                             <div className="p-3 border-amber-100 border-b">
                                 <PostActions
                                     postId={post?._id}
+                                    likes={post?.likes}
+                                    likesCountUpdater={setActions}
                                     refetchPost={refetchPost}
                                 />
 
                                 {/* <!-- Likes --> */}
                                 <div className="mb-1">
                                     <p className="text-sm font-semibold">
-                                        {post?.likesCount} likes
+                                        {actions.likeCountSate} likes
                                     </p>
                                 </div>
 

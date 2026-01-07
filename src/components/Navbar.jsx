@@ -1,10 +1,11 @@
 import { Link, Navigate, useNavigate } from "react-router";
 import Logo from "../assets/logo-2.svg";
 import useAuth from "../hooks/useAuth.jsx";
+// import useAvatar from "../hooks/useAvatar.jsx";
 export default function Navbar() {
     const { auth } = useAuth();
     const user = auth.user;
-
+    // const { avatarURL } = useAvatar(user?.avatar);
     const navigate = useNavigate();
     return (
         <aside className="hidden floating-navbar bg-white  border px-6 py-2 md:flex flex-col">
@@ -116,9 +117,7 @@ export default function Navbar() {
                         <div className="flex items-center">
                             <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
                                 <img
-                                    src={`${import.meta.env.VITE_SERVER_URL}/${
-                                        user?.avatar
-                                    }`}
+                                    src={user?.avatar}
                                     alt="User avatar"
                                     className="w-full h-full object-cover"
                                 />

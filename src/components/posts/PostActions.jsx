@@ -8,6 +8,7 @@ import { Bounce, toast } from "react-toastify";
 export default function PostActions({
     postId,
     refetchPost,
+    likes,
     likesCountUpdater,
 }) {
     const { auth } = useAuth();
@@ -17,12 +18,10 @@ export default function PostActions({
     const [hasLiked, setHasLiked] = useState(false);
 
     useEffect(() => {
-        if (post && auth?.user?._id) {
-            setHasLiked(
-                post.likes?.some((like) => like?._id === auth.user._id)
-            );
+        if (likes && auth?.user?._id) {
+            setHasLiked(likes.some((like) => like._id === auth.user._id));
         }
-    }, [post, auth?.user?._id]);
+    }, [likes, post, auth?.user?._id]);
 
     const handleLikeBtn = async () => {
         if (auth?.user) {
@@ -32,7 +31,8 @@ export default function PostActions({
                         import.meta.env.VITE_SERVER_BASE_URL
                     }/posts/${postId}/like`
                 );
-                if (response.status == 200) {
+
+                if (response?.status == 200) {
                     setHasLiked((prev) => !prev);
                     refetchPost();
 

@@ -1,12 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import useAxios from "../hooks/useAxios";
 import useProfile from "../hooks/useProfile";
 import { Bounce, toast } from "react-toastify";
 import ChangePassword from "../components/ChangePassword";
+import { AvatarContext } from "../contexts";
 
 export default function EditProfilePage() {
     const api = useAxios();
-
+    const { setUserAvatar } = useContext(AvatarContext);
     const { user, loading, refetch } = useProfile();
     const [userData, setUserData] = useState(null);
     const photoBtnRef = useRef(null);
@@ -59,17 +60,27 @@ export default function EditProfilePage() {
     };
 
     const handleChangePhoto = async () => {
-        const formData = new FormData();
-        for (const file of photoBtnRef.current.files) {
-            formData.append("avatar", file);
-        }
+        const data = new FormData();
+
+        data.append("file", photoBtnRef.current.files[0]);
+        data.append("upload_preset", "final-project");
+        data.append("cloud_name", "dtk2ucppn");
+        const response = await fetch(
+            "https://api.cloudinary.com/v1_1/dtk2ucppn/image/upload",
+            {
+                method: "POST",
+                body: data,
+            }
+        );
+        const result = await response.json();
 
         try {
             const response = await api.patch(
                 `${import.meta.env.VITE_SERVER_BASE_URL}/users/me/avatar`,
-                formData
+                { avatar: result.secure_url }
             );
             if (response.status == 200) {
+                setUserAvatar(response?.data?.user?.avatar);
                 toast.success("Your avatar has been updated", {
                     position: "top-center",
                     autoClose: 3000,
@@ -111,9 +122,10 @@ export default function EditProfilePage() {
                 <div className="flex items-center">
                     <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
                         <img
-                            src={`${import.meta.env.VITE_SERVER_URL}/${
+                            src={
                                 userData?.avatar
-                            }`}
+                                // `${import.meta.env.VITE_SERVER_URL}/${userData?.avatar}`
+                            }
                             alt={userData?.name}
                             className="w-full h-full object-cover"
                         />
@@ -196,7 +208,7 @@ export default function EditProfilePage() {
                 />
                 <div className="flex justify-end">
                     <span className="text-gray-500 text-xs">
-                        {userData?.bio.length} / 150
+                        {userData?.bio?.length} / 150
                     </span>
                 </div>
             </div>

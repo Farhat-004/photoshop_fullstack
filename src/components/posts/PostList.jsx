@@ -29,7 +29,8 @@ export default function PostsList() {
             );
 
             if (res.status === 200) {
-                const newPosts = res.data || [];
+                const newPosts = res.data.posts || [];
+                setHasMore(res.data.hasMore);
 
                 setPosts((prev) => {
                     const ids = new Set(prev.map((p) => p._id));
@@ -41,8 +42,6 @@ export default function PostsList() {
                     setHasMore(false);
                     return;
                 }
-
-                if (newPosts.length < limit) setHasMore(false);
             }
         } catch (err) {
             console.error("Post fetch failed:", err.message);
@@ -92,7 +91,7 @@ export default function PostsList() {
 
             {hasMore && (
                 <div ref={loaderRef} className="text-center py-4 text-gray-500">
-                    {loading ? "Loading more posts..." : "Scroll to load more"}
+                    Loading more posts...
                 </div>
             )}
 

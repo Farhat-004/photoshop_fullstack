@@ -18,10 +18,10 @@ export const Router = createBrowserRouter([
                 path: "/profile-page/:userId",
                 element: <ProfilePage />,
             },
-            {
-                path: "/notification",
-                element: <Notification />,
-            },
+            // {
+            //     path: "/notification",
+            //     element: <Notification />,
+            // },
             {
                 path: "/",
                 element: <HomePage />,

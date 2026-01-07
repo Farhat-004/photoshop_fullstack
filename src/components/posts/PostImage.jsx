@@ -6,7 +6,7 @@ export default function PostImage({ image, postId }) {
         <div className="relative">
             <Link to={`/post/${postId}`}>
                 <img
-                    src={`${import.meta.env.VITE_SERVER_URL}/${image}`}
+                    src={image}
                     alt="Post image"
                     className="w-full object-cover max-h-[1000px]"
                 />

@@ -9,6 +9,8 @@ export default function ProfilePage() {
     const params = useParams();
     const [userData, setUserData] = useState(null);
     const { user, loading, postsCount } = useGetUser(params?.userId);
+    console.log(user);
+    console.log("params : ", params?.userId);
 
     useEffect(() => {
         if (params.userId && user) {
@@ -28,9 +30,12 @@ export default function ProfilePage() {
                         <div className="flex justify-items-end md:justify-start md:w-1/3 mb-6 md:mb-0 relative">
                             <div className="w-24 h-24 md:w-36 md:h-36 rounded-full overflow-hidden border border-gray-300 mx-auto">
                                 <img
-                                    src={`${import.meta.env.VITE_SERVER_URL}/${
+                                    src={
+                                        // `${import.meta.env.VITE_SERVER_URL}/${
+                                        //     userData?.avatar
+                                        // }`
                                         userData?.avatar
-                                    }`}
+                                    }
                                     alt="Profile picture"
                                     className="w-full h-full object-cover"
                                 />

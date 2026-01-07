@@ -15,10 +15,10 @@ export default function useGetUser(id) {
                 `${import.meta.env.VITE_SERVER_BASE_URL}/posts/user/${id}`
             );
             if (response?.status === 200) {
-                let { user, posts, postsCount } = response.data;
+                let { user, posts } = response.data; //postCount
                 setUser(user);
                 setPosts(posts);
-                setPostCount(postsCount);
+                setPostCount(posts.length);
             }
         } catch (err) {
             console.log(err.response?.data?.message || err.message);

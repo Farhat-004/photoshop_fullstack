@@ -10,7 +10,7 @@ import PostLikes from "./PostLikes";
 import PostLikesList from "./PostLikesList";
 
 export default function Post({ post }) {
-    const { refetchPost } = useGetPost(post?.postId);
+    const { refetchPost } = useGetPost(post?._id);
     const [actions, setActions] = useState({
         likeCountSate: post.likesCount,
         commentsCountSate: post.commentsCount,
@@ -24,20 +24,21 @@ export default function Post({ post }) {
 
             <PostActions
                 postId={post?._id}
-                likes={post.likes}
+                likes={post?.likes}
                 likesCountUpdater={setActions}
                 refetchPost={refetchPost}
             />
+
             {showList && (
-                <PostLikesList
+                <PostLikesList //opens a modal, contains list of likes and the users
                     postLikes={post?.likes}
                     onClose={() => setShowList(false)}
                 />
             )}
 
             <PostLikes
-                likes={post.likes}
-                likesCount={actions.likeCountSate}
+                likes={post?.likes}
+                likesCount={actions?.likeCountSate}
                 refetchPost={refetchPost}
                 onListClick={() => setShowList(true)}
             />

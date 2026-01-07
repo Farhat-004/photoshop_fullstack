@@ -32,23 +32,30 @@ export default function CreatePost() {
     };
 
     const handlePost = async () => {
-        const formData = new FormData();
-
         const selectedFile = pictureBtnRef.current.files[0];
-        formData.append("caption", caption);
 
-        if (selectedFile) {
-            formData.append("image", selectedFile);
-        }
+        const data = new FormData();
+        data.append("file", selectedFile);
+        data.append("upload_preset", "final-project");
+        data.append("cloud_name", "dtk2ucppn");
+        const response = await fetch(
+            "https://api.cloudinary.com/v1_1/dtk2ucppn/image/upload",
+            {
+                method: "POST",
+                body: data,
+            }
+        );
+        const result = await response.json();
 
         try {
+            console.log("caption :", caption);
+            console.log("image :", result.secure_url);
+
             const response = await api.post(
                 `${import.meta.env.VITE_SERVER_BASE_URL}/posts/`,
-                formData,
                 {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
+                    caption,
+                    image: result.secure_url,
                 }
             );
             if (response.status === 201) {
@@ -80,9 +87,48 @@ export default function CreatePost() {
             });
         }
     };
+    // const handlePost = async () => {
+    //     try {
+    //         console.log("caption :", caption);
 
+    //         const response = await api.post(
+    //             `${import.meta.env.VITE_SERVER_BASE_URL}/posts/`,
+    //             {
+    //                 image: "ImageURL",
+    //                 caption: "fake caption",
+    //             }
+    //         );
+    //         if (response.status === 201) {
+    //             setImageUrl("");
+    //             setCaption("");
+    //             toast.success("Your post has been shared", {
+    //                 position: "top-right",
+    //                 autoClose: 5000,
+    //                 hideProgressBar: false,
+    //                 closeOnClick: false,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //                 theme: "colored",
+    //                 transition: Bounce,
+    //             });
+    //         }
+    //     } catch (error) {
+    //         toast.error(`${error?.response?.data?.message}. Failed to post.`, {
+    //             position: "top-right",
+    //             autoClose: 5000,
+    //             hideProgressBar: false,
+    //             closeOnClick: false,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //             theme: "light",
+    //             transition: Bounce,
+    //         });
+    //     }
+    // };
     return (
-        <div className="">
+        <div>
             {user?._id ? (
                 <>
                     <header className="h-14 border-b flex items-center justify-between px-4">
