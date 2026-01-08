@@ -1,4 +1,4 @@
-# PhotoBooth Full_Stack Project (React)
+# PhotoBooth **Full-Stack** Project (MERN)
 
 PhotoBooth is a **React-based social media web application**.  
 It converts existing static HTML templates (`login.html`, `register.html`, `profile.html`, etc.) into fully dynamic, functional pages with **JWT Authentication**, **REST API integration**, and **stateful UI interactions** — closely resembling a real-world social platform (Instagram).
