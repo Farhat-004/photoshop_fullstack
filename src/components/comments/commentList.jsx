@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { PostContext } from "../../contexts";
 
 export default function CommentList({ postId }) {
-    const { post, refetchPost } = useContext(PostContext);
+    const { post } = useContext(PostContext);
     return (
         <div className="comments-section flex-grow p-3 border-amber-100 border-b">
             {/* <!-- Post Owner Comment --> */}
@@ -13,7 +13,7 @@ export default function CommentList({ postId }) {
                 post?.comments?.map((comment) => (
                     <Comment
                         postId={postId}
-                        refetchPost={refetchPost}
+                        // refetchPost={refetchPost}
                         key={comment._id}
                         comment={comment}
                     />

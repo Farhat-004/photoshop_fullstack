@@ -21,8 +21,6 @@ export default function PostDetails() {
     });
     useEffect(() => {
         if (post?._id) {
-            console.log(post?.author);
-
             setActions({
                 likeCountSate: post?.likesCount,
                 commentsCountSate: post?.commentsCount,

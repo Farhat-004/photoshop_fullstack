@@ -7,21 +7,20 @@ import useAxios from "../../hooks/useAxios";
 import { PostContext } from "../../contexts";
 import { Bounce, toast } from "react-toastify";
 
-export default function Comment({ comment }) {
-    const { user } = useGetUser(comment?.user?._id);
+export default function Comment({ comment, postId }) {
     const { refetchPost } = useContext(PostContext);
     const { auth } = useAuth();
     const api = useAxios();
-    const { avatarURL } = useAvatar(user?.avatar);
     const [editMode, setEditMode] = useState(false);
     const [text, setText] = useState(comment?.text);
-    const showOptions = auth?.user?._id === comment?.user?._id;
+    const showOptions = auth?.user?._id === comment?.author?._id;
+
     const handleDelete = async () => {
         try {
             const response = await api.delete(
-                `${import.meta.env.VITE_SERVER_BASE_URL}/posts/comment/${
-                    comment?._id
-                }`
+                `${
+                    import.meta.env.VITE_SERVER_BASE_URL
+                }/posts/${postId}/comment/${comment?._id}`
             );
             if (response.status === 200) {
                 refetchPost();
@@ -108,8 +107,8 @@ export default function Comment({ comment }) {
             <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-r  mr-2 ">
                 <div className="w-full h-full rounded-full overflow-hidden bg-white p-[1px] mr-2">
                     <img
-                        src={avatarURL}
-                        alt={comment?.user?.name}
+                        src={comment.author.avatar}
+                        alt={comment?.author?.name}
                         className="w-full h-full object-cover rounded-full"
                     />
                 </div>
@@ -117,23 +116,24 @@ export default function Comment({ comment }) {
             <div className="flex-1">
                 <div className="flex items-center">
                     <span className="font-semibold text-sm">
-                        {comment?.user?.name}
+                        {comment?.author?.name}
                     </span>
 
-                    {comment?.updatedAt ? (
+                    {/* {new Date(comment?.updatedAt).getTime() !==
+                    new Date(comment?.createdAt).getTime() ? (
                         <span className="text-xs text-gray-500 ml-2">
                             edited{" "}
                             {getDateDifferenceFromNow(comment?.updatedAt)}
                         </span>
-                    ) : (
-                        <span className="text-xs text-gray-500 ml-2">
-                            {getDateDifferenceFromNow(comment?.createdAt)}
-                        </span>
-                    )}
+                    ) : ( */}
+                    <span className="text-xs text-gray-500 ml-2">
+                        {getDateDifferenceFromNow(comment?.createdAt)}
+                    </span>
+                    {/* )} */}
                 </div>
                 {!editMode ? (
                     <p className="text-sm mt-2 text-gray-800">
-                        {comment?.text}
+                        {comment?.comment}
                     </p>
                 ) : (
                     <>

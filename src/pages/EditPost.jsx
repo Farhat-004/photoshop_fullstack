@@ -14,9 +14,10 @@ export default function EditPost() {
     const pictureBtnRef = useRef(null);
     const [imageUrl, setImageUrl] = useState("");
     const [caption, setCaption] = useState("");
+    const [isImageChanged, setIsImageChanged] = useState(false);
     useEffect(() => {
         if (post) {
-            setImageUrl(`${import.meta.env.VITE_SERVER_URL}/${post.image}`);
+            setImageUrl(post.image);
             setCaption(post.caption || "");
         }
     }, [post]);
@@ -36,19 +37,36 @@ export default function EditPost() {
         if (fileList && fileList.length > 0) {
             const newImageUrl = URL.createObjectURL(fileList[0]);
             setImageUrl(newImageUrl);
+            setIsImageChanged(true);
         } else {
             setImageUrl("");
         }
     };
 
     const handlePost = async () => {
-        const formData = new FormData();
+        // const formData = new FormData();
+        const data = new FormData();
 
         const selectedFile = pictureBtnRef.current.files[0];
-        formData.append("caption", caption);
 
-        if (selectedFile) {
-            formData.append("image", selectedFile);
+        data.append("file", selectedFile);
+        data.append("upload_preset", "final-project");
+        data.append("cloud_name", "dtk2ucppn");
+
+        const response = await fetch(
+            "https://api.cloudinary.com/v1_1/dtk2ucppn/image/upload",
+            {
+                method: "POST",
+                body: data,
+            }
+        );
+        const result = await response.json();
+        if (isImageChanged) {
+            setImageUrl(result.secure_url);
+            // formData.append("image", result.secure_url);
+        } else {
+            setImageUrl(post?.image);
+            // formData.append("image", post?.image);
         }
 
         try {
@@ -56,12 +74,7 @@ export default function EditPost() {
                 `${import.meta.env.VITE_SERVER_BASE_URL}/posts/${
                     params.postId
                 }`,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
+                { caption, image: imageUrl }
             );
             if (response.status === 200) {
                 setImageUrl("");
@@ -130,12 +143,7 @@ export default function EditPost() {
                 <div className="w-full md:w-1/2 bg-gray-100 flex items-center justify-center relative">
                     {imageUrl && (
                         <img
-                            src={
-                                imageUrl ??
-                                `${import.meta.env.VITE_SERVER_URL}/${
-                                    post?.image
-                                }`
-                            }
+                            src={imageUrl ?? post?.image}
                             alt="Upload preview"
                             className="image-preview mt-48 mr-48 w-full object-cover max-h-[1000px]"
                         />
@@ -163,11 +171,7 @@ export default function EditPost() {
                     {/* <!-- User Info --> */}
                     <div className="flex items-center p-4 border-b">
                         <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300">
-                            <img
-                                src={`${import.meta.env.VITE_SERVER_URL}/${
-                                    user?.avatar
-                                }`}
-                            />
+                            <img src={user?.avatar} />
                         </div>
                         <span className="ml-3 font-semibold text-sm">
                             {user?.name}

@@ -48,9 +48,6 @@ export default function CreatePost() {
         const result = await response.json();
 
         try {
-            console.log("caption :", caption);
-            console.log("image :", result.secure_url);
-
             const response = await api.post(
                 `${import.meta.env.VITE_SERVER_BASE_URL}/posts/`,
                 {
