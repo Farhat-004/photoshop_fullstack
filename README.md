@@ -205,7 +205,7 @@ It converts existing static HTML templates (`login.html`, `register.html`, `prof
 
 ---
 
-## License
+## Note
 
 This project is created for **educational purposes** as part of a frontend assignment. Later it was updated to Full-Stack project by developing a new backend with Express and MongoDB.
 All API routes and HTML templates are created by own following another backend.
