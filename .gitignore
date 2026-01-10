@@ -14,8 +14,8 @@ dist-ssr
 *.local
 .env
 ../backend/.env
-backend/.env
-frontend/.env
+./backend/.env
+./frontend/.env
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -26,3 +26,4 @@ frontend/.env
 *.njsproj
 *.sln
 *.sw?
+
